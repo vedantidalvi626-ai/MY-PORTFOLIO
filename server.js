@@ -16,6 +16,9 @@ app.use(express.json());
 const frontendPath = path.join(__dirname, 'frontend');
 app.use(express.static(frontendPath));
 
+/* ⭐ ADD THIS LINE (IMPORTANT FIX FOR IMAGES OUTSIDE FRONTEND) */
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 // ✅ Contact API (keep BEFORE catch-all)
 app.post('/api/contact', (req, res) => {
   console.log("📩 Incoming Data:", req.body);
@@ -42,7 +45,7 @@ app.post('/api/contact', (req, res) => {
   });
 });
 
-// ✅ IMPORTANT: Catch-all route (fixes Not Found)
+// ✅ Catch-all route (fixes Not Found)
 app.get('*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
