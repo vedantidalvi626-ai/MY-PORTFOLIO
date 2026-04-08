@@ -13,14 +13,10 @@ app.use(cors({
 app.use(express.json());
 
 // ✅ Serve frontend files
-app.use(express.static(path.join(__dirname, 'frontend')));
+const frontendPath = path.join(__dirname, 'frontend');
+app.use(express.static(frontendPath));
 
-// ✅ Home route (loads index.html)
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
-});
-
-// ✅ Contact API
+// ✅ Contact API (keep BEFORE catch-all)
 app.post('/api/contact', (req, res) => {
   console.log("📩 Incoming Data:", req.body);
 
@@ -46,7 +42,12 @@ app.post('/api/contact', (req, res) => {
   });
 });
 
-// ✅ IMPORTANT: Railway PORT fix
+// ✅ IMPORTANT: Catch-all route (fixes Not Found)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
+
+// ✅ Railway PORT
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
