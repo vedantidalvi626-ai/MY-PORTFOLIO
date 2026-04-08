@@ -1,5 +1,5 @@
 // Replace this with your REAL Railway backend URL
-const API_URL = "my-portfolio-production-84e0.up.railway.app";
+const API_URL = "https://my-portfolio-production-84e0.up.railway.app";
 
 // Handle form submit
 document.addEventListener("DOMContentLoaded", () => {
