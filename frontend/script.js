@@ -1,19 +1,49 @@
-// ✅ Correct Railway backend URL
-const API_URL = "https://my-portfolio-production-84e0.up.railway.app";
+// ===========================
+// CONFIG
+// ===========================
+const API_URL = window.location.origin; // works on Railway
 
-// ✅ Hide loader when page loads
-window.addEventListener("load", () => {
+// ===========================
+// PAGE LOADER FIX
+// ===========================
+window.onload = function () {
   const loader = document.getElementById("loader");
   if (loader) {
-    loader.classList.add("hidden");
+    loader.style.display = "none";
   }
+};
+
+// ===========================
+// MOBILE MENU FIX
+// ===========================
+function closeMenu() {
+  const overlay = document.getElementById("mobOverlay");
+  if (overlay) overlay.classList.remove("open");
+}
+
+// ===========================
+// SCROLL ANIMATION FIX ✅
+// ===========================
+document.addEventListener("DOMContentLoaded", () => {
+  const elements = document.querySelectorAll(".slide-up");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      }
+    });
+  });
+
+  elements.forEach(el => observer.observe(el));
 });
 
-// ✅ Handle form submit safely
+// ===========================
+// CONTACT FORM
+// ===========================
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("#contactForm"); // use ID (safer)
+  const form = document.querySelector("#contactForm");
 
-  // ✅ Prevent crash if form not found
   if (!form) {
     console.error("Form not found!");
     return;
@@ -22,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // ✅ Get values safely
     const fname = document.querySelector("#fname")?.value || "";
     const lname = document.querySelector("#lname")?.value || "";
     const email = document.querySelector("#email")?.value || "";
