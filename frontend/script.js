@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const form = document.getElementById('contactForm');
 const success = document.getElementById('formSuccess');
 
-form.addEventListener('submit', function(e) {
+form.addEventListener('submit', async function(e) {
   e.preventDefault();
 
   const btn = form.querySelector('.submit-btn');
@@ -206,16 +206,17 @@ form.addEventListener('submit', function(e) {
     message: document.getElementById('message').value
   };
 
-  fetch('http://localhost:5000/contact', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  .then(res => res.text())
-  .then(response => {
-    console.log(response);
+  try {
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.text();
+    console.log(result);
 
     label.textContent = 'Send Message';
     btn.disabled = false;
@@ -225,14 +226,13 @@ form.addEventListener('submit', function(e) {
     form.reset();
 
     setTimeout(() => success.classList.remove('show'), 6000);
-  })
-  .catch(err => {
+
+  } catch (err) {
     console.log(err);
     label.textContent = 'Error ❌';
     btn.disabled = false;
-  });
+  }
 });
-
 
   // ─────────────────────────────────────
   // 11. HERO PARALLAX
