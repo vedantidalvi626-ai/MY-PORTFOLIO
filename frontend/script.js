@@ -1,19 +1,33 @@
-// Replace this with your REAL Railway backend URL
+// ✅ Correct Railway backend URL
 const API_URL = "https://my-portfolio-production-84e0.up.railway.app";
 
-// Handle form submit
+// ✅ Hide loader when page loads
+window.addEventListener("load", () => {
+  const loader = document.getElementById("loader");
+  if (loader) {
+    loader.classList.add("hidden");
+  }
+});
+
+// ✅ Handle form submit safely
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("form");
+  const form = document.querySelector("#contactForm"); // use ID (safer)
+
+  // ✅ Prevent crash if form not found
+  if (!form) {
+    console.error("Form not found!");
+    return;
+  }
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Get values from form inputs
-    const fname = document.querySelector("#fname").value;
-    const lname = document.querySelector("#lname").value;
-    const email = document.querySelector("#email").value;
-    const budget = document.querySelector("#budget").value;
-    const message = document.querySelector("#message").value;
+    // ✅ Get values safely
+    const fname = document.querySelector("#fname")?.value || "";
+    const lname = document.querySelector("#lname")?.value || "";
+    const email = document.querySelector("#email")?.value || "";
+    const budget = document.querySelector("#budget")?.value || "";
+    const message = document.querySelector("#message")?.value || "";
 
     try {
       const response = await fetch(`${API_URL}/api/contact`, {
