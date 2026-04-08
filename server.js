@@ -16,10 +16,10 @@ app.use(express.json());
 const frontendPath = path.join(__dirname, 'frontend');
 app.use(express.static(frontendPath));
 
-/* ⭐ ADD THIS LINE (IMPORTANT FIX FOR IMAGES OUTSIDE FRONTEND) */
+// ✅ Serve images folder (IMPORTANT FIX)
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-// ✅ Contact API (keep BEFORE catch-all)
+// ✅ Contact API (must be BEFORE catch-all)
 app.post('/api/contact', (req, res) => {
   console.log("📩 Incoming Data:", req.body);
 
@@ -45,8 +45,8 @@ app.post('/api/contact', (req, res) => {
   });
 });
 
-// ✅ Catch-all route (fixes Not Found)
-app.get('*', (req, res) => {
+// ✅ FIXED catch-all route (NO path-to-regexp error)
+app.get('/*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
