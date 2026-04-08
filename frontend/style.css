@@ -115,6 +115,12 @@ body {
 }
 .loader-text span { -webkit-text-fill-color: transparent; }
 
+@media (max-width: 768px) {
+  .slide-up {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}
 /* ── CUSTOM CURSOR ── */
 .cursor-dot {
   width: 8px; height: 8px;
