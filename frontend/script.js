@@ -88,3 +88,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+// FIX for mobile visibility
+document.addEventListener("DOMContentLoaded", () => {
+  const elements = document.querySelectorAll(".slide-up");
+
+  if (window.innerWidth < 768) {
+    // 📱 On mobile → show everything directly
+    elements.forEach(el => el.classList.add("visible"));
+  } else {
+    // 💻 Desktop → use animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    });
+
+    elements.forEach(el => observer.observe(el));
+  }
+});
