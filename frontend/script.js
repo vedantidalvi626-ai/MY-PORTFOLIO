@@ -1,6 +1,6 @@
 // =============================================
 //  PORTFOLIO — VEDANTI DALVI
-//  script.js  |  All interactions
+//  script.js  |  All interactions (FIXED)
 // =============================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,13 +33,21 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(animateRing);
   })();
 
-  document.querySelectorAll('a, button, .proj-card, .skill-card, .chip, input, textarea, select').forEach(el => {
-    el.addEventListener('mouseenter', () => ring.classList.add('expanded'));
-    el.addEventListener('mouseleave', () => ring.classList.remove('expanded'));
+  document.querySelectorAll('a, button, .proj-card, .skill-card, .chip, input, textarea, select')
+    .forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('expanded'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('expanded'));
+    });
+
+  document.addEventListener('mouseleave', () => {
+    dot.style.opacity = '0';
+    ring.style.opacity = '0';
   });
 
-  document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
-  document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '0.7'; });
+  document.addEventListener('mouseenter', () => {
+    dot.style.opacity = '1';
+    ring.style.opacity = '0.7';
+  });
 
 
   // ─────────────────────────────────────
@@ -63,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     menuOpen = true;
     mobOverlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+
     const spans = hamburger.querySelectorAll('span');
     spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
     spans[1].style.opacity = '0';
@@ -72,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     menuOpen = false;
     mobOverlay.classList.remove('open');
     document.body.style.overflow = '';
+
     const spans = hamburger.querySelectorAll('span');
     spans[0].style.transform = '';
     spans[1].style.opacity = '';
@@ -87,10 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const slideEls = document.querySelectorAll('.slide-up');
 
   const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
+    entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
+
       const siblings = [...entry.target.parentElement.querySelectorAll('.slide-up:not(.visible)')];
       const idx = siblings.indexOf(entry.target);
+
       setTimeout(() => entry.target.classList.add('visible'), Math.max(0, idx * 80));
       revealObs.unobserve(entry.target);
     });
@@ -108,10 +120,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const target = parseInt(el.dataset.target, 10);
     const dur = 1800, step = 16;
     const inc = target / (dur / step);
+
     let cur = 0;
     const id = setInterval(() => {
       cur += inc;
-      if (cur >= target) { cur = target; clearInterval(id); }
+      if (cur >= target) {
+        cur = target;
+        clearInterval(id);
+      }
       el.textContent = Math.floor(cur);
     }, step);
   }
@@ -153,7 +169,9 @@ document.addEventListener('DOMContentLoaded', () => {
     a.addEventListener('click', e => {
       const target = document.querySelector(a.getAttribute('href'));
       if (!target) return;
+
       e.preventDefault();
+
       window.scrollTo({
         top: target.getBoundingClientRect().top + window.scrollY - 80,
         behavior: 'smooth'
@@ -182,57 +200,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ─────────────────────────────────────
+  // 10. CONTACT FORM (FIXED BACKEND CONNECT)
   // ─────────────────────────────────────
-// 10. CONTACT FORM (CONNECTED TO BACKEND)
-// ─────────────────────────────────────
-const form = document.getElementById('contactForm');
-const success = document.getElementById('formSuccess');
 
-form.addEventListener('submit', async function(e) {
-  e.preventDefault();
+  const form = document.getElementById('contactForm');
+  const success = document.getElementById('formSuccess');
 
-  const btn = form.querySelector('.submit-btn');
-  const label = btn.querySelector('.btn-label');
+  const API_URL = window.location.origin; // ✅ FIX FOR RAILWAY + LOCAL
 
-  label.textContent = 'Sending…';
-  btn.disabled = true;
-  btn.style.opacity = '0.7';
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-  const data = {
-    fname: document.getElementById('fname').value,
-    lname: document.getElementById('lname').value,
-    email: document.getElementById('email').value,
-    budget: document.getElementById('budget').value,
-    message: document.getElementById('message').value
-  };
+    const btn = form.querySelector('.submit-btn');
+    const label = btn.querySelector('.btn-label');
 
-  try {
-    const response = await fetch('/api/contact', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
+    label.textContent = 'Sending…';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
 
-    const result = await response.text();
-    console.log(result);
+    const data = {
+      fname: document.getElementById('fname').value,
+      lname: document.getElementById('lname').value,
+      email: document.getElementById('email').value,
+      budget: document.getElementById('budget').value,
+      message: document.getElementById('message').value
+    };
 
-    label.textContent = 'Send Message';
-    btn.disabled = false;
-    btn.style.opacity = '1';
+    try {
+      const response = await fetch(`${API_URL}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
 
-    success.classList.add('show');
-    form.reset();
+      const result = await response.text();
+      console.log(result);
 
-    setTimeout(() => success.classList.remove('show'), 6000);
+      label.textContent = 'Send Message';
+      btn.disabled = false;
+      btn.style.opacity = '1';
 
-  } catch (err) {
-    console.log(err);
-    label.textContent = 'Error ❌';
-    btn.disabled = false;
-  }
-});
+      success.classList.add('show');
+      form.reset();
+
+      setTimeout(() => success.classList.remove('show'), 6000);
+
+    } catch (err) {
+      console.log(err);
+      label.textContent = 'Error ❌';
+      btn.disabled = false;
+    }
+  });
+
 
   // ─────────────────────────────────────
   // 11. HERO PARALLAX
@@ -246,14 +267,19 @@ form.addEventListener('submit', async function(e) {
 
 
   // ─────────────────────────────────────
-  // 12. MARQUEE PAUSE ON HOVER
+  // 12. MARQUEE PAUSE
   // ─────────────────────────────────────
   const marqueeTrack = document.querySelector('.marquee-track');
   if (marqueeTrack) {
-    marqueeTrack.addEventListener('mouseenter', () => marqueeTrack.style.animationPlayState = 'paused');
-    marqueeTrack.addEventListener('mouseleave', () => marqueeTrack.style.animationPlayState = 'running');
+    marqueeTrack.addEventListener('mouseenter', () => {
+      marqueeTrack.style.animationPlayState = 'paused';
+    });
+
+    marqueeTrack.addEventListener('mouseleave', () => {
+      marqueeTrack.style.animationPlayState = 'running';
+    });
   }
 
 
-  console.log('%c✦ Vedanti Dalvi — Portfolio Loaded', 'background:linear-gradient(135deg,#7c3aed,#ec4899);color:#fff;padding:6px 16px;border-radius:4px;font-weight:600;');
+  console.log('%c✦ Portfolio Loaded Successfully', 'background:#7c3aed;color:#fff;padding:6px 12px;border-radius:4px');
 });
