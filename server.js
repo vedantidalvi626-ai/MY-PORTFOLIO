@@ -45,8 +45,8 @@ app.post('/api/contact', (req, res) => {
   });
 });
 
-// ✅ FIXED catch-all route (NO path-to-regexp error)
-app.get('/*', (req, res) => {
+// ✅ Catch-all fallback (FIXED - no path-to-regexp error)
+app.use((req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
