@@ -10,16 +10,20 @@ app.use(cors({
   origin: '*',
   methods: ['GET', 'POST']
 }));
+
 app.use(express.json());
 
-// ✅ Serve frontend files
+// ✅ Paths
 const frontendPath = path.join(__dirname, 'frontend');
-app.use(express.static(frontendPath));
+const assetsPath = path.join(__dirname, 'assets');
+const imagesPath = path.join(__dirname, 'images');
 
-// ✅ Serve images folder (IMPORTANT FIX)
-app.use('/images', express.static(path.join(__dirname, 'images')));
+// ✅ Serve static files (ORDER MATTERS)
+app.use(express.static(frontendPath));          // frontend files
+app.use('/assets', express.static(assetsPath)); // ✅ resume PDF FIX
+app.use('/images', express.static(imagesPath)); // images
 
-// ✅ Contact API (must be BEFORE catch-all)
+// ✅ API ROUTE (must be before catch-all)
 app.post('/api/contact', (req, res) => {
   console.log("📩 Incoming Data:", req.body);
 
@@ -45,7 +49,7 @@ app.post('/api/contact', (req, res) => {
   });
 });
 
-// ✅ Catch-all fallback (FIXED - no path-to-regexp error)
+// ✅ Catch-all (MUST BE LAST)
 app.use((req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
