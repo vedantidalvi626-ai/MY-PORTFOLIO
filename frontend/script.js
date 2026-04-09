@@ -1,61 +1,410 @@
-// ✅ Correct Railway backend URL
-const API_URL = "https://my-portfolio-production-84e0.up.railway.app";
+<!DOCTYPE html>
+<html lang="en">
 
-// ✅ Hide loader when page loads
-window.addEventListener("load", () => {
-  const loader = document.getElementById("loader");
-  if (loader) {
-    loader.classList.add("hidden");
-  }
-});
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vedanti Dalvi — Data Analyst</title>
+  <link rel="stylesheet" href="/frontend/style.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+</head>
 
-// ✅ Handle form submit safely
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("#contactForm"); // use ID (safer)
+<body>
 
-  // ✅ Prevent crash if form not found
-  if (!form) {
-    console.error("Form not found!");
-    return;
-  }
+  <!-- Page loader -->
+  <div class="loader" id="loader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">VD<span>.</span></div>
+  </div>
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  <!-- Cursor -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
 
-    // ✅ Get values safely
-    const fname = document.querySelector("#fname")?.value || "";
-    const lname = document.querySelector("#lname")?.value || "";
-    const email = document.querySelector("#email")?.value || "";
-    const budget = document.querySelector("#budget")?.value || "";
-    const message = document.querySelector("#message")?.value || "";
+  <!-- Floating blobs (decorative) -->
+  <div class="blob blob-1" aria-hidden="true"></div>
+  <div class="blob blob-2" aria-hidden="true"></div>
+  <div class="blob blob-3" aria-hidden="true"></div>
 
-    try {
-      const response = await fetch(`${API_URL}/api/contact`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          fname,
-          lname,
-          email,
-          budget,
-          message
-        })
-      });
+  <!-- ── NAV ── -->
+  <nav class="nav" id="nav">
+    <a href="#home" class="nav-brand">VD<span>.</span></a>
+    <div class="nav-center">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#work" class="nav-link">Projects</a>
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+    <a href="#contact" class="nav-cta">Hire Me →</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span>
+    </button>
+  </nav>
 
-      const result = await response.text();
+  <!-- Mobile overlay -->
+  <div class="mob-overlay" id="mobOverlay">
+    <button class="mob-close" id="mobClose">✕</button>
+    <nav class="mob-nav">
+      <a href="#about" onclick="closeMenu()">About</a>
+      <a href="#work" onclick="closeMenu()">Projects</a>
+      <a href="#skills" onclick="closeMenu()">Skills</a>
+      <a href="#contact" onclick="closeMenu()">Contact</a>
+    </nav>
+    <p class="mob-tagline">Open for opportunities.</p>
+  </div>
 
-      if (response.ok) {
-        alert("✅ Message sent successfully!");
-        form.reset();
-      } else {
-        alert("❌ Error: " + result);
-      }
+  <!-- ── HERO ── -->
+  <section class="hero" id="home">
+    <div class="hero-marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Portfolio 2026</span><span class="dot">·</span>
+        <span>Data Analyst</span><span class="dot">·</span>
+        <span>Python Developer</span><span class="dot">·</span>
+        <span>Power BI</span><span class="dot">·</span>
+        <span>Portfolio 2026</span><span class="dot">·</span>
+        <span>Data Analyst</span><span class="dot">·</span>
+        <span>Python Developer</span><span class="dot">·</span>
+        <span>Power BI</span><span class="dot">·</span>
+      </div>
+    </div>
 
-    } catch (error) {
-      console.error("Fetch Error:", error);
-      alert("❌ Server not reachable");
-    }
-  });
-});
+    <div class="hero-layout container">
+      <div class="hero-left">
+        <p class="hero-eyebrow slide-up">✦ Based in Pune, India</p>
+        <h1 class="hero-headline slide-up">
+          Turning<br />
+          <em>data</em> into<br />
+          <span class="stroke-text">insights.</span>
+        </h1>
+        <div class="hero-meta slide-up">
+          <div class="availability">
+            <span class="pulse-dot"></span>
+            Available for projects
+          </div>
+        </div>
+        <div class="hero-btns slide-up">
+          <a href="#work" class="btn btn-primary">View Project</a>
+          <a href="#contact" class="btn btn-ghost">Let's Talk →</a>
+
+          <!-- Resume Download -->
+          <a href="assets/vedanti resume 1 (1).pdf" download class="btn btn-outline">
+            Download Resume ⬇
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-right slide-up">
+        <div class="hero-img-wrap">
+          <div class="hero-img-glow"></div>
+          <div class="hero-img-frame">
+            <img src="/images/vedanti.jpeg" alt="Vedanti Dalvi" />
+            <div class="img-badge">
+              <span class="badge-icon">📊</span>
+              <span>Data Analyst</span>
+            </div>
+          </div>
+          <div class="floating-card card-1 slide-up">
+            <span class="card-icon">🏆</span>
+            <div>
+              <strong>0 Awards</strong>
+              <small>Recognized Excellence</small>
+            </div>
+          </div>
+          <div class="floating-card card-2 slide-up">
+            <span class="card-icon">✅</span>
+            <div>
+              <strong>3 Projects</strong>
+              <small>Delivered on Time</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-stats container">
+      <div class="hstat slide-up">
+        <span class="hstat-num" data-target="3">0</span><span class="hstat-suf">+</span>
+        <p>Projects</p>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat slide-up">
+        <span class="hstat-num" data-target="0">0</span><span class="hstat-suf">yrs</span>
+        <p>Experience</p>
+      </div>
+      <div class="hstat-divider"></div>
+
+    </div>
+
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section class="about section" id="about">
+    <div class="container">
+      <div class="section-tag slide-up">— About Me</div>
+      <div class="about-grid">
+        <div class="about-left slide-up">
+          <h2>Data is not just <br /><em>numbers</em>, it is<br />stories waiting<br />to be told.</h2>
+          <div class="about-img-wrap">
+            <img src="/images/vedanti.jpeg" alt="Vedanti Dalvi" />
+          </div>
+        </div>
+        <div class="about-right slide-up">
+          <p>Hi, I'm <strong>Vedanti</strong> — a data analyst who believes meaningful insights come from understanding
+            the story behind the data, not just the figures.</p>
+          <p>I work with tools like SQL, Excel, and Python to clean, analyze, and visualize data, helping turn complex
+            datasets into clear, actionable insights that drive smarter decisions.</p>
+          <p>Fresh out of college and hungry to make an impact — I bring curiosity, creativity, and strong analytical
+            thinking to every project I take on.</p>
+
+          <div class="about-chips">
+            <div class="chip">🎓 Bsc IT Graduate</div>
+            <div class="chip">📍 Pune, India</div>
+            <div class="chip">💼 Open to Work</div>
+            <div class="chip">🚀 Quick Learner</div>
+          </div>
+
+          <a href="#contact" class="btn btn-primary mt24">Work With Me →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SKILLS ── -->
+  <section class="skills-section section" id="skills">
+    <div class="container">
+      <div class="section-tag slide-up">— My Toolkit</div>
+      <h2 class="section-title slide-up">Skills &amp; <em>Technologies</em></h2>
+
+      <div class="skills-grid">
+        <div class="skill-card slide-up">
+          <div class="skill-icon">🗃️</div>
+          <h4>Data Analysis</h4>
+          <p>SQL, Excel, Pandas — cleaning and crunching datasets to uncover patterns.</p>
+          <div class="skill-bar">
+            <div class="skill-fill" data-width="85"></div>
+          </div>
+        </div>
+        <div class="skill-card slide-up">
+          <div class="skill-icon">📊</div>
+          <h4>Visualization</h4>
+          <p>Power BI, Matplotlib, Seaborn — turning raw numbers into compelling charts.</p>
+          <div class="skill-bar">
+            <div class="skill-fill" data-width="80"></div>
+          </div>
+        </div>
+        <div class="skill-card slide-up">
+          <div class="skill-icon">🐍</div>
+          <h4>Python</h4>
+          <p>Scripting, automation, and data pipelines using Python and its ecosystem.</p>
+          <div class="skill-bar">
+            <div class="skill-fill" data-width="78"></div>
+          </div>
+        </div>
+        <div class="skill-card slide-up">
+          <div class="skill-icon">🌐</div>
+          <h4>Web Dev</h4>
+          <p>HTML, CSS, JavaScript, Django — building functional and beautiful interfaces.</p>
+          <div class="skill-bar">
+            <div class="skill-fill" data-width="72"></div>
+          </div>
+        </div>
+        <div class="skill-card slide-up">
+          <div class="skill-icon">🎨</div>
+          <h4>UI / UX Design</h4>
+          <p>Designing user-friendly interfaces with a strong focus on experience.</p>
+          <div class="skill-bar">
+            <div class="skill-fill" data-width="70"></div>
+          </div>
+        </div>
+        <div class="skill-card slide-up">
+          <div class="skill-icon">🗄️</div>
+          <h4>Databases</h4>
+          <p>MySQL, SQLite — designing schemas and writing optimized queries.</p>
+          <div class="skill-bar">
+            <div class="skill-fill" data-width="75"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WORK ── -->
+  <section class="work section" id="work">
+    <div class="container">
+      <div class="work-header slide-up">
+        <div class="section-tag">— Selected Work</div>
+        <h2 class="section-title">Recent <em>projects</em></h2>
+      </div>
+
+      <div class="proj-grid">
+
+        <div class="proj-card slide-up">
+          <div class="proj-card-img">
+            <img src="/images/sales.png" alt="Analytix Pro"
+              onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&q=80'" />
+            <div class="proj-card-overlay">
+              <a href="#" class="view-link">View Project ↗</a>
+            </div>
+            <div class="proj-badge">Power BI</div>
+          </div>
+          <div class="proj-card-info">
+            <span class="proj-cat">📈 Sales Dashboard</span>
+            <h3>Sales dashboard</h3>
+            <p>Real-time analytics dashboard with customizable widgets, dark/light modes, and role-based access.</p>
+            <div class="proj-tags">
+              <span>Python</span><span>Power BI</span><span>SQL</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card slide-up">
+          <div class="proj-card-img">
+            <img src="/images/LIBRARY.png" alt="library management system" />
+            <div class="proj-card-overlay">
+              <a href="#" class="view-link">View Project ↗</a>
+            </div>
+            <div class="proj-badge">App</div>
+          </div>
+          <div class="proj-card-info">
+            <span class="proj-cat">💪 Health · iOS App</span>
+            <h3>Library management system</h3>
+            <p> Built a Library Management System with CRUD operations, MySQL integration, and real-time search to
+              manage books and users efficiently.
+            </p>
+            <div class="proj-tags">
+              <span>Python</span><span>tkinter</span><span>My sql</span>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+        </div>
+
+        <div class="proj-card slide-up">
+          <div class="proj-card-img">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=700&q=80" alt="Studio Blanc" />
+            <div class="proj-card-overlay">
+              <a href="#" class="view-link">View Project ↗</a>
+            </div>
+            <div class="proj-badge">Web</div>
+          </div>
+          <div class="proj-card-info">
+            <span class="proj-cat">🌐 Branding · Web</span>
+            <h3>Studio Blanc</h3>
+            <p>Brand identity and editorial website for a luxury architecture studio in Mumbai.</p>
+            <div class="proj-tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TESTIMONIAL ── -->
+  <section class="testimonial-section">
+    <div class="container">
+      <div class="testimonial slide-up">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <blockquote>
+          Vedanti delivered clear and insightful dashboards that helped us understand our sales performance better. Her
+          analysis improved our decision-making and boosted efficiency across the team.
+        </blockquote>
+        <div class="testimonial-author">
+          <img src="/images/sir.jpeg" alt="sanjay shah" />
+          <div>
+            <strong>Sanjay shah</strong>
+            <span>CEO SPCL Infotech — Pune</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section class="contact section" id="contact">
+    <div class="container">
+      <div class="contact-layout">
+        <div class="contact-left slide-up">
+          <div class="section-tag">— Get In Touch</div>
+          <h2>Let's create<br />something <em>great</em><br />together.</h2>
+          <p class="contact-sub">I'm currently open to freelance projects, internships, and full-time opportunities.
+            Let's connect!</p>
+          <div class="contact-info-items">
+            <!-- You can add email/phone/location here later -->
+          </div>
+
+          <form class="contact-form slide-up" id="contactForm" novalidate>
+            <div class="form-row">
+              <div class="field">
+                <label for="fname">First Name</label>
+                <input type="text" id="fname" placeholder="Rohan" required />
+              </div>
+              <div class="field">
+                <label for="lname">Last Name</label>
+                <input type="text" id="lname" placeholder="Verma" required />
+              </div>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" placeholder="rohan@company.com" required />
+            </div>
+            <div class="field">
+              <label for="budget">Project Budget</label>
+              <select id="budget">
+                <option value="">Select a range…</option>
+                <option>Under ₹50,000</option>
+                <option>₹50,000 – ₹1,00,000</option>
+                <option>₹1,00,000 – ₹3,00,000</option>
+                <option>₹3,00,000+</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="message">Tell me about your project</label>
+              <textarea id="message" rows="4" placeholder="I need help with…" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary submit-btn">
+              <span class="btn-label">Send Message</span>
+              <span class="btn-arrow">→</span>
+            </button>
+            <p class="form-success" id="formSuccess">✓ Message sent! I'll reply within 24 hours.</p>
+            <p>📞 Phone: <a href="tel:+918767925979">+91 8767925979</a></p>
+
+            <p>📧 Email:
+              <a href="mailto:vedantidalvi626@gmail.com">
+                vedantidalvi626@gmail.com
+              </a>
+            </p>
+
+            <p>🔗 LinkedIn:
+              <a href="https://www.linkedin.com/in/your-linkedin-id" target="_blank">
+                www.linkedin.com/in/
+                vedantidalvi21
+              </a>
+            </p>
+          </form>
+        </div>
+      </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">VD<span>.</span></div>
+      <p class="footer-copy">© 2026 spcl infotech pune</p>
+      <a href="#home" class="footer-top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="/frontend/script.js"></script>
+</body>
+
+</html>
