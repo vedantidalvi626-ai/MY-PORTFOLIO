@@ -739,7 +739,7 @@ blockquote {
 
 /* ── ANIMATIONS ── */
 .slide-up {
-  opacity: 0; transform: translateY(0);
+  opacity: 1; transform: translateY(0);
   transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
 }
 .slide-up.visible { opacity: 1; transform: translateY(0); }
